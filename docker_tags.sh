@@ -10,6 +10,13 @@ SED_CMD=$(command -v sed)
 GREP_CMD=$(command -v grep)
 _SEARCH="${*:-}"
 
+function log()
+{
+  local _input
+  _input="${*}"
+  echo "LOG: ${_input}"
+}
+
 function get_images()
 {
     for repository in $(curl "${PROTO}://${MIRROR_SERVER}/v2/_catalog" 2>/dev/null| ${JQ_CMD} .repositories[] | ${SED_CMD} -e 's/"//g')
@@ -24,8 +31,8 @@ function get_images()
         echo "### Image ${repository} has ${_images} tags"
         echo ''
     done
-
 }
-# MIAN
+
+# MAIN
 
 get_images
