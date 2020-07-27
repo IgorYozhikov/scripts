@@ -22,14 +22,14 @@ function get_images()
     for repository in $(curl "${PROTO}://${MIRROR_SERVER}/v2/_catalog" 2>/dev/null| ${JQ_CMD} .repositories[] | ${SED_CMD} -e 's/"//g')
     do
         _images=0
-        echo "### Processing image ${repository}"
+        log "### Processing image ${repository}"
         for entry in $(${CURL_CMD} "${PROTO}://${MIRROR_SERVER}/v2/${repository}/tags/list" 2>/dev/null | ${JQ_CMD}  -r '. | .tags[] as $tag | .name+":"+$tag')
         do
-            echo "${PROTO}://${MIRROR_SERVER}/${entry}"
+            log "${PROTO}://${MIRROR_SERVER}/${entry}"
             _images=$(( _images + 1))
         done
-        echo "### Image ${repository} has ${_images} tags"
-        echo ''
+        log "### Image ${repository} has ${_images} tags"
+        log ''
     done
 }
 
